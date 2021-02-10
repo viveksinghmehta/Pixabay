@@ -1,0 +1,22 @@
+PODS:
+  - DefaultsKit (0.2.0)
+  - SDWebImage (5.10.4):
+    - SDWebImage/Core (= 5.10.4)
+  - SDWebImage/Core (5.10.4)
+
+DEPENDENCIES:
+  - DefaultsKit
+  - SDWebImage (~> 5.0)
+
+SPEC REPOS:
+  trunk:
+    - DefaultsKit
+    - SDWebImage
+
+SPEC CHECKSUMS:
+  DefaultsKit: 6c767941b2c3fe34c4d70e300e6c3b80c94964dd
+  SDWebImage: c666b97e1fa9c64b4909816a903322018f0a9c84
+
+PODFILE CHECKSUM: 1b253a1e905a448dab83a736ceb1fb6c7e9ef5b6
+
+COCOAPODS: 1.9.3
