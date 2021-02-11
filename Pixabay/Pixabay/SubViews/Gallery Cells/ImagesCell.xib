@@ -22,7 +22,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="251" height="275"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mgG-gS-kbd">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mgG-gS-kbd">
                         <rect key="frame" x="0.0" y="0.0" width="251" height="275"/>
                     </imageView>
                 </subviews>

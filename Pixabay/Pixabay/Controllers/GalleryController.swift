@@ -31,9 +31,6 @@ class GalleryController: UIViewController {
         galleryCollectionView.register(UINib(nibName: "ImagesCell", bundle: nil), forCellWithReuseIdentifier: identifier)
         galleryCollectionView.delegate = self
         galleryCollectionView.dataSource = self
-        if let layout = galleryCollectionView?.collectionViewLayout as? PinterestLayout {
-            layout.delegate = self
-        }
     }
     
     
@@ -61,21 +58,18 @@ class GalleryController: UIViewController {
         if let images = model.images {
             let firstCount = pixabayImagesModel.images?.count ?? 0
             let lastCount = firstCount + images.count
-            self.pixabayImagesModel.images?.append(contentsOf: images)
-            galleryCollectionView.reloadData()
-//            galleryCollectionView.performBatchUpdates({
-//                let indexPaths = Array((firstCount)...(lastCount)).map { IndexPath(item: $0, section: 0) }
-//                self.pixabayImagesModel.images?.append(contentsOf: images)
-//                self.galleryCollectionView.insertItems(at: indexPaths)
-////                galleryCollectionView.reloadData()
-//            }, completion: nil)
+            galleryCollectionView.performBatchUpdates({
+                let indexPaths = Array((firstCount)...(lastCount - 1)).map { IndexPath(item: $0, section: 0) }
+                self.pixabayImagesModel.images?.append(contentsOf: images)
+                self.galleryCollectionView.insertItems(at: indexPaths)
+            }, completion: nil)
         }
     }
     
 }
 
 
-extension GalleryController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, PinterestLayoutDelegate {
+extension GalleryController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -108,14 +102,10 @@ extension GalleryController: UICollectionViewDelegate, UICollectionViewDataSourc
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let itemSize = (collectionView.frame.width - (collectionView.contentInset.left + collectionView.contentInset.right + 10)) / 2
-        return CGSize(width: itemSize, height: itemSize)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
         guard let height = pixabayImagesModel.images?[indexPath.row].previewHeight else {
-            return 0.0
+            return CGSize(width: 0, height: 0)
         }
-        return CGFloat(height)
+        return CGSize(width: itemSize - 10, height: CGFloat(height))
     }
     
     
