@@ -32,6 +32,7 @@ class NetworkService {
         var queryParameters = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
         //appending the api key query to the url component
         queryParameters.append(URLQueryItem(name: "key", value: Pixabay.Apikey))
+        queryParameters.append(URLQueryItem(name: "per_page", value: "20"))
         baseURL.queryItems = queryParameters
         
         guard let url = baseURL.url else { return }

@@ -8,7 +8,7 @@
 import UIKit
 
 class GalleryController: UIViewController {
-
+    
     //MARK:- Outlets
     @IBOutlet weak var galleryCollectionView: UICollectionView!
     
@@ -16,8 +16,9 @@ class GalleryController: UIViewController {
     //MARK:- Properties
     var pixabayImagesModel: PixabayImagesModel!
     private let identifier: String = "images"
-    private let page: Int = 1
-    
+    private var page: Int = 1
+    var searchedKeyword: String = ""
+    private var loadMore: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,13 +32,47 @@ class GalleryController: UIViewController {
         galleryCollectionView.delegate = self
         galleryCollectionView.dataSource = self
         if let layout = galleryCollectionView?.collectionViewLayout as? PinterestLayout {
-          layout.delegate = self
+            layout.delegate = self
         }
     }
-
     
-
+    
+    fileprivate func loadMoreImages() {
+        let parameters = [
+            "q": searchedKeyword,
+            "page": String(page)
+        ]
+        Loader.shared.addLoader(on: self, frames: view.bounds)
+        NetworkService.shared.getImages(with: parameters, model: PixabayImagesModel.self) { [weak self] (response) in
+            guard let weakself = self else { return }
+            Loader.shared.removeLoader(from: weakself)
+            switch response {
+            case .success(let model):
+                weakself.adddnewImages(model)
+            case .failure(let error):
+                print(error.localizedDescription)
+                weakself.showAlert(title: "Error", msg: error.localizedDescription)
+            }
+        }
+    }
+    
+    
+    fileprivate func adddnewImages(_ model: PixabayImagesModel) {
+        if let images = model.images {
+            let firstCount = pixabayImagesModel.images?.count ?? 0
+            let lastCount = firstCount + images.count
+            self.pixabayImagesModel.images?.append(contentsOf: images)
+            galleryCollectionView.reloadData()
+//            galleryCollectionView.performBatchUpdates({
+//                let indexPaths = Array((firstCount)...(lastCount - 1)).map { IndexPath(item: $0, section: 0) }
+//                self.pixabayImagesModel.images?.append(contentsOf: images)
+//                self.galleryCollectionView.insertItems(at: indexPaths)
+//            }, completion: nil)
+        }
+    }
+    
 }
+
 
 extension GalleryController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, PinterestLayoutDelegate {
     
@@ -58,9 +93,19 @@ extension GalleryController: UICollectionViewDelegate, UICollectionViewDataSourc
         navigationController?.pushViewController(fullScreen, animated: false)
     }
     
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if loadMore {
+            // loading the new images when the cell will display last images
+            if indexPath.row > ((20 * page) - 5) {
+                page += 1
+                loadMoreImages()
+            }
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-      let itemSize = (collectionView.frame.width - (collectionView.contentInset.left + collectionView.contentInset.right + 10)) / 2
-      return CGSize(width: itemSize, height: itemSize)
+        let itemSize = (collectionView.frame.width - (collectionView.contentInset.left + collectionView.contentInset.right + 10)) / 2
+        return CGSize(width: itemSize, height: itemSize)
     }
     
     func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {

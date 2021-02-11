@@ -26,6 +26,12 @@ class ImageViewerController: UIViewController {
     
     fileprivate func collectionViewInit() {
         imageViewerCollectionView.register(UINib(nibName: "FullScreenImageCell", bundle: nil), forCellWithReuseIdentifier: identifier)
+        if let layout = imageViewerCollectionView.collectionViewLayout as? PagingCollectionViewLayout {
+            layout.scrollDirection = .horizontal
+            layout.minimumInteritemSpacing = 2
+            layout.minimumLineSpacing = 0
+        }
+        imageViewerCollectionView.decelerationRate = .fast
         imageViewerCollectionView.delegate = self
         imageViewerCollectionView.dataSource = self
         imageViewerCollectionView.scrollToItem(at: IndexPath(row: selectedImageIndex, section: 0), at: [.centeredHorizontally, .centeredVertically], animated: false)

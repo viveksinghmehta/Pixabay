@@ -112,11 +112,12 @@ extension SearchController: UITableViewDelegate, UITableViewDataSource {
     fileprivate func searchForImages(keyword: String) {
         let parameters = [
             "q": keyword,
-            "per_page": "20",
             "page": "1"
         ]
+        Loader.shared.addLoader(on: self, frames: view.bounds)
         NetworkService.shared.getImages(with: parameters, model: PixabayImagesModel.self) { [weak self] (response) in
             guard let weakself = self else { return }
+            Loader.shared.removeLoader(from: weakself)
             switch response {
             case .success(let model):
                 print(model)
@@ -160,6 +161,7 @@ extension SearchController: UITableViewDelegate, UITableViewDataSource {
     
     fileprivate func showAllImages(_ model: PixabayImagesModel) {
         let gallery = GalleryController()
+        gallery.searchedKeyword = curentKeyword
         gallery.pixabayImagesModel = model
         self.navigationController?.pushViewController(gallery, animated: true)
     }
@@ -173,6 +175,7 @@ extension SearchController: UISearchBarDelegate {
     
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
         searchBar.setShowsCancelButton(true, animated: true)
+        isSearching = true
         searchBar.returnKeyType = .search
         return true
     }
@@ -180,12 +183,23 @@ extension SearchController: UISearchBarDelegate {
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = nil
+        isSearching = false
+        recentlySearchedTable.reloadData()
         view.endEditing(true)
         searchBar.setShowsCancelButton(false, animated: true)
     }
     
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if let keyword = searchBar.text {
+            filteredWords = recentlySearchedWords.filter( {$0.contains(keyword) })
+            recentlySearchedTable.reloadData()
+        }
+    }
+    
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        isSearching = false
+        recentlySearchedTable.reloadData()
         if let keyword = searchBar.text, !keyword.isEmpty {
             curentKeyword = keyword
             searchForImages(keyword: keyword)
@@ -193,8 +207,44 @@ extension SearchController: UISearchBarDelegate {
             searchBar.text = nil
             searchBar.setShowsCancelButton(false, animated: true)
         } else {
-            
+            showAlert(title: "Please enter you keyword", msg: "please enter your keywords for searching the images.")
         }
     }
     
+}
+
+
+class Loader {
+    
+    static let shared = Loader()
+    
+    let loadingView: UIView = {
+       let view = UIView()
+        //Adding blur view to the loader
+        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(blurEffectView)
+        
+        //Adding the activityIndiicator to the view
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.color = .black
+        activityIndicator.startAnimating()
+        view.addSubview(activityIndicator)
+        
+        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        return view
+    }()
+    
+    func addLoader(on: UIViewController, frames: CGRect) {
+        loadingView.frame = frames
+        on.view.addSubview(loadingView)
+    }
+    
+    func removeLoader(from controller: UIViewController) {
+        loadingView.removeFromSuperview()
+    }
 }

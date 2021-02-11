@@ -28,6 +28,7 @@
 		1EA6F3CE25D433DB00FAB037 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EA6F3CC25D433DB00FAB037 /* LaunchScreen.storyboard */; };
 		1EB8761525D43E85006480FF /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB8761325D43E85006480FF /* SearchController.swift */; };
 		1EB8761625D43E85006480FF /* SearchController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EB8761425D43E85006480FF /* SearchController.xib */; };
+		1EEC82BB25D4E8A9003E1426 /* PagingCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEC82BA25D4E8A9003E1426 /* PagingCollectionViewLayout.swift */; };
 		8688A5FBDB0692D6F95B945A /* Pods_Pixabay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FCB6F32C2DD134CEC0925C4 /* Pods_Pixabay.framework */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,7 @@
 		1EA6F3CF25D433DB00FAB037 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1EB8761325D43E85006480FF /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
 		1EB8761425D43E85006480FF /* SearchController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchController.xib; sourceTree = "<group>"; };
+		1EEC82BA25D4E8A9003E1426 /* PagingCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingCollectionViewLayout.swift; sourceTree = "<group>"; };
 		5FCB6F32C2DD134CEC0925C4 /* Pods_Pixabay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pixabay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62DAD40E18E44EDBB3CB5DFC /* Pods-Pixabay.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pixabay.release.xcconfig"; path = "Target Support Files/Pods-Pixabay/Pods-Pixabay.release.xcconfig"; sourceTree = "<group>"; };
 		CEE02504644F4FCDDB107659 /* Pods-Pixabay.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pixabay.debug.xcconfig"; path = "Target Support Files/Pods-Pixabay/Pods-Pixabay.debug.xcconfig"; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				1E0A674D25D44B3E00F454F6 /* DefaultsHelper.swift */,
 				1E0A675F25D467D400F454F6 /* UIViewController + Extension.swift */,
 				1E0A676225D469B100F454F6 /* PinterestLayout.swift */,
+				1EEC82BA25D4E8A9003E1426 /* PagingCollectionViewLayout.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -311,6 +314,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1EEC82BB25D4E8A9003E1426 /* PagingCollectionViewLayout.swift in Sources */,
 				1E0A677025D46D8700F454F6 /* GalleryController.swift in Sources */,
 				1E365B1A25D48BCE00866AA4 /* FullScreenImageCell.swift in Sources */,
 				1EA6F3C225D433DA00FAB037 /* AppDelegate.swift in Sources */,
