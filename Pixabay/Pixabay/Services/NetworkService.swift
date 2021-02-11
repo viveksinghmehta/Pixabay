@@ -26,7 +26,7 @@ class NetworkService {
     
     
     
-    func getImages<T: Codable>(with parameters: Parameters, model: T.Type, completion: @escaping(Result<T, Error>) -> Void) {
+    func getImages<T: Codable>(with parameters: Parameters, model: T.Type, completion: @escaping(Result<T, NetworkError>) -> Void) {
         
         //Creating the query parameters
         var queryParameters = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
@@ -42,14 +42,15 @@ class NetworkService {
             if let error = error {
                 // return the error
                 DispatchQueue.main.async {
-                    completion(.failure(error))
+                    print(error.localizedDescription)
+                    completion(.failure(.CouldNotGetResponse))
                 }
             }
             
             guard let httpResponse = response as? HTTPURLResponse,
                   (200...299).contains(httpResponse.statusCode) else {
                 print("Error with the response, unexpected status code: \(String(describing: response))")
-                //TODO:- thorw error
+                completion(.failure(.NoStatusCode))
                 return
             }
             self.decodeTheData(with: data, model, completion: completion)
@@ -58,7 +59,7 @@ class NetworkService {
         task.resume()
     }
     
-    private func decodeTheData<T: Codable>(with data: Data?, _ model: T.Type, completion: @escaping(Result<T, Error>) -> Void) {
+    private func decodeTheData<T: Codable>(with data: Data?, _ model: T.Type, completion: @escaping(Result<T, NetworkError>) -> Void) {
         if let jsonData = data {
             let decoder = JSONDecoder()
             do {
@@ -69,7 +70,7 @@ class NetworkService {
             } catch let error {
                 print(error.localizedDescription)
                 DispatchQueue.main.async {
-                    completion(.failure(error))
+                    completion(.failure(.CouldNotDecodeModel))
                 }
             }
         } else {

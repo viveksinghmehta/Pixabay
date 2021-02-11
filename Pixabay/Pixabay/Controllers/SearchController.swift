@@ -133,19 +133,27 @@ extension SearchController: UITableViewDelegate, UITableViewDataSource {
     
     fileprivate func checkForData(_ model: PixabayImagesModel) {
         if let images = model.images, !images.isEmpty {
+            saveKeyword()
             showAllImages(model)
         } else {
             showAlert(title: "No result found", msg: "Please try with some different keywords")
         }
     }
     
+    
+    //Save the searched keywords
     fileprivate func saveKeyword() {
         if let words = Defaults().get(for: .recentlySearchedWords) {
             if words.count == 10 {
                 recentlySearchedWords.remove(at: 0)
                 saveFullKeyWords()
             } else {
-                saveFullKeyWords()
+                if let _ = recentlySearchedWords.filter( { $0.lowercased() == curentKeyword.lowercased() } ).first, let index = recentlySearchedWords.firstIndex(where: { $0.lowercased() == curentKeyword.lowercased() }) {
+                    recentlySearchedWords.remove(at: index)
+                    saveFullKeyWords()
+                } else {
+                    saveFullKeyWords()
+                }
             }
         } else {
             saveFullKeyWords()
