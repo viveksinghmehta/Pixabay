@@ -101,9 +101,11 @@ extension SearchController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if isSearching {
             searchForImages(keyword: filteredWords[indexPath.row])
+            curentKeyword = filteredWords[indexPath.row]
             print(filteredWords[indexPath.row])
         } else {
             searchForImages(keyword: recentlySearchedWords[indexPath.row])
+            curentKeyword = recentlySearchedWords[indexPath.row]
             print(recentlySearchedWords[indexPath.row])
         }
     }
@@ -121,7 +123,7 @@ extension SearchController: UITableViewDelegate, UITableViewDataSource {
             switch response {
             case .success(let model):
                 print(model)
-                weakself.showAllImages(model)
+                weakself.checkForData(model)
             case .failure(let error):
                 print(error.localizedDescription)
                 weakself.showAlert(title: "Error", msg: error.localizedDescription)

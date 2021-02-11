@@ -64,9 +64,10 @@ class GalleryController: UIViewController {
             self.pixabayImagesModel.images?.append(contentsOf: images)
             galleryCollectionView.reloadData()
 //            galleryCollectionView.performBatchUpdates({
-//                let indexPaths = Array((firstCount)...(lastCount - 1)).map { IndexPath(item: $0, section: 0) }
+//                let indexPaths = Array((firstCount)...(lastCount)).map { IndexPath(item: $0, section: 0) }
 //                self.pixabayImagesModel.images?.append(contentsOf: images)
 //                self.galleryCollectionView.insertItems(at: indexPaths)
+////                galleryCollectionView.reloadData()
 //            }, completion: nil)
         }
     }
@@ -76,9 +77,11 @@ class GalleryController: UIViewController {
 
 extension GalleryController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, PinterestLayoutDelegate {
     
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return pixabayImagesModel.images?.count ?? 0
     }
+    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? ImagesCell else { return UICollectionViewCell() }
